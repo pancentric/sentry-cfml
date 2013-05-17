@@ -29,7 +29,7 @@
                         <code>{{ query_string|pprint }}</code>
                     </td>
                 </tr>
-		{% if url %}
+                {% if url %}
                     <tr>
                         <th>{% trans "URL Scope:" %}</th>
                         <td>
@@ -53,7 +53,7 @@
                         </td>
                     </tr>
                 {% endif %}
-		{% if sessions %}
+                {% if sessions %}
                     <tr>
                         <th>{% trans "Session Scope:" %}</th>
                         <td>
@@ -61,7 +61,7 @@
                         </td>
                     </tr>
                 {% endif %}
-		{% if application %}
+                {% if application %}
                     <tr>
                         <th>{% trans "Application Scope:" %}</th>
                         <td>
@@ -69,11 +69,19 @@
                         </td>
                     </tr>
                 {% endif %}
-		{% if cgi %}
+                {% if cgi %}
                     <tr>
                         <th>{% trans "CGI Scope:" %}</th>
                         <td>
                             {% render_values cgi %}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if request %}
+                    <tr>
+                        <th>{% trans "Request Scope:" %}</th>
+                        <td>
+                            {% render_values request %}
                         </td>
                     </tr>
                 {% endif %}

@@ -5,18 +5,18 @@ from django.utils.translation import ugettext as _
 
 
 class CFMLHttp(Interface):
-    
+
     display_score = 1050
     score = 850
-    
+
     attrs = ('url_path', 'method', 'form', 'url', 'query_string', 'cookies', 'sessions',
-             'applicaion', 'headers', 'cgi')
+             'application', 'headers', 'cgi', 'request')
 
     # methods as defined by http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html
     METHODS = ('GET', 'POST', 'PUT', 'OPTIONS', 'HEAD', 'DELETE', 'TRACE', 'CONNECT')
 
     def __init__(self, url_path, method=None, form=None, url=None, query_string=None, cookies=None,
-                sessions=None, application=None, headers=None, cgi=None, **kwargs):
+                sessions=None, application=None, headers=None, cgi=None, request=None, **kwargs):
 
         urlparts = urlparse.urlsplit(url_path)
         self.url_path = '%s://%s%s' % (urlparts.scheme, urlparts.netloc, urlparts.path)
@@ -33,6 +33,7 @@ class CFMLHttp(Interface):
         self.cookies = cookies or {}
         self.headers = headers or {}
         self.cgi = cgi or {}
+        self.request = request or {}
 
     def serialize(self):
         return {
@@ -46,6 +47,7 @@ class CFMLHttp(Interface):
             'application': self.application,
             'cgi': self.cgi,
             'headers': self.headers,
+            'request': self.request,
         }
 
     def to_string(self, event, is_public=False, **kwargs):
@@ -69,8 +71,9 @@ class CFMLHttp(Interface):
             'application': self.application,
             'sessions': self.sessions,
             'headers': self.headers,
+            'request': self.request,
         }
-        
+
         if not is_public:
             context.update({
                 'application': self.application,
@@ -78,7 +81,7 @@ class CFMLHttp(Interface):
                 'cookies': self.cookies,
                 'cgi': self.cgi,
             })
-        
+
         return render_to_string('sentry_cfml/partial/interfaces/cfmlhttp.html', context)
 
     def get_title(self):
